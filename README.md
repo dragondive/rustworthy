@@ -133,3 +133,24 @@ several months of struggle, I could eventually determine the problems in C++ tem
 code based on the "shape" of the error message. (not exaggerating!) Although I can now
 look back at it now with amusement, it was an extremely frustrating period of time in
 the early days of my professional career.
+
+## Code Coverage
+
+The next logical step after setting up unit testing is setting up code coverage. Prima
+facie, the Rust ecosystem in this regard is pretty impressive. The Cargo subcommand
+[`llvm-cov`](https://lib.rs/crates/cargo-llvm-cov) gets the job done well. It was easy
+to install and run by following the instructions from the documentation.
+
+The documentation explains how to view the code coverage in VS Code using the `Coverage
+Gutters` extension.
+
+![Rust coverage](static/rust_coverage.png)
+
+It also has the Github Actions setup to upload the coverage to Codecov. Once again, I am
+happy that I do not have to use Gitlab CI here. [_Sorry, Gitlab CI, given how much
+frustration I have had to bear with your UX for a year, I cannot let go of any
+opportunity I get to take a swipe at you._ :smiling_imp:]
+
+I created a `CODECOV_TOKEN`, added it as a repository secret, then my pipeline job was
+ready to go. The code coverage report is published on Codecov
+[here](https://app.codecov.io/github/heavens-arena/rustworthy/tree/setup%2Fhello_world).

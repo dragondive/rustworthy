@@ -26,3 +26,31 @@ jobs:
         run: |
           cd hello_world
           cargo test
+
+  coverage:
+    runs-on: ubuntu-latest
+    env:
+      CARGO_TERM_COLOR: always
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          ref: setup/hello_world
+
+      - name: setup rust toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1.9.0
+
+      - name: install cargo-llvm-cov
+        uses: taiki-e/install-action@cargo-llvm-cov
+
+      - name: generate code coverage
+        run: |
+          cd hello_world
+          cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
+
+      - name: upload code coverage
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: lcov.info
+          fail_ci_if_error: true
