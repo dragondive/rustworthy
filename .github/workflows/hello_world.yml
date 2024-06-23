@@ -1,0 +1,23 @@
+name: Pipeline jobs for the Hello World package
+on:
+  push:
+    branches:
+      - setup/hello_world
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          ref: setup/hello_world
+    
+      - name: setup rust toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1.9.0
+
+      - name: build and run hello_world
+        run: |
+          cd hello_world
+          cargo build
+          cargo run hello_world
