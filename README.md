@@ -65,3 +65,71 @@ in a few minutes. The complete workflow is [here](.github/workflows/hello_world.
 familiar with it. More recently, I have had to use Gitlab CI instead for about a year.
 I have had some irritations with Github Actions' UX in the past, but when compared to
 Gitlab CI's UX, Github Actions has started feeling like heaven._]
+
+## Unit Testing
+
+Next I want to put in place the unit testing setup. I learned that Rust convention is
+to place unit tests in the same file as its source code, which is a fascinating choice.
+It brought back a few frustrating memories of missing, obsolete and misplaced unit
+tests, especially after some rounds of refactoring.
+
+I created a separate source file [`get_42.rs`](hello_world/src/get_42.rs) that
+contains a function and its unit test. For Cargo build (and test) to "see" the file,
+the module needs to be included in the main file. The Cargo build approach to discovery
+feels simpler than the more cumbersome `Makefile` approach used by ... ahem, some
+other languages. :P
+
+Testing is also integrated more directly into the Rust language, as against some other
+languages where it is enabled through separate libraries or modules.
+
+Then I ran the test locally and also updated the Github Actions job with another step
+to run the test on the pipeline.
+
+```bash
+dragondive@Laughtale:~/heavens-arena/rustworthy/hello_world$ cargo test
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running unittests src/main.rs (target/debug/deps/hello_world-b901389d868bd6fa)
+
+running 1 test
+test get_42::tests::test_get_42 ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+```
+
+To ensure that the test is working properly, I followed my usual innovative (lol)
+approach of delibarately causing the test to fail by comparing `true` with `false`.
+
+```bash
+dragondive@Laughtale:~/heavens-arena/rustworthy/hello_world$ cargo test
+   Compiling hello_world v0.1.0 (/home/dragondive/heavens-arena/rustworthy/hello_world)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.64s
+     Running unittests src/main.rs (target/debug/deps/hello_world-b901389d868bd6fa)
+
+running 1 test
+test get_42::tests::test_get_42 ... FAILED
+
+failures:
+
+---- get_42::tests::test_get_42 stdout ----
+thread 'get_42::tests::test_get_42' panicked at src/get_42.rs:12:9:
+assertion `left == right` failed
+  left: true
+ right: false
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    get_42::tests::test_get_42
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin hello_world`
+```
+
+Overall, my impression so far has been that Rust and Cargo give very useful messages
+that help to understand and fix problems. Once again, I was reminded of my early
+struggles with templates in C++03, where the error messages were incomprehensible. After
+several months of struggle, I could eventually determine the problems in C++ template
+code based on the "shape" of the error message. (not exaggerating!) Although I can now
+look back at it now with amusement, it was an extremely frustrating period of time in
+the early days of my professional career.

@@ -21,3 +21,8 @@ jobs:
           cd hello_world
           cargo build
           cargo run hello_world
+
+      - name: test hello_world
+        run: |
+          cd hello_world
+          cargo test
