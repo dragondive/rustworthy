@@ -154,3 +154,22 @@ opportunity I get to take a swipe at you._ :smiling_imp:]
 I created a `CODECOV_TOKEN`, added it as a repository secret, then my pipeline job was
 ready to go. The code coverage report is published on Codecov
 [here](https://app.codecov.io/github/heavens-arena/rustworthy/tree/setup%2Fhello_world).
+
+## Publishing Test Results
+
+If the test results are exported in a popular standard format such as Junit, they
+can be published in graphical representations for convenience. I learned that the
+`cargo test` command does not directly support exporting the test results to another
+format. Instead the `cargo-nextest` package could be used.
+
+Once again, the instructions in the official documentation was easy to follow to
+[install nextest](https://nexte.st/docs/installation/pre-built-binaries/), to
+[enable Junit support](https://nexte.st/docs/machine-readable/junit/), and to
+[setup the Github Action](https://nexte.st/docs/installation/pre-built-binaries/#using-pre-built-binaries-in-ci).
+Combining it with [Publish Test Results](https://github.com/marketplace/actions/publish-test-results)
+action from the Marketplace, I updated my Github Actions workflow file to publish the
+test results to Github Actions UI.
+
+Many open source projects also publish various project status information directly on
+their README page. I will [come back to this](https://github.com/heavens-arena/rustworthy/issues/1)
+later.

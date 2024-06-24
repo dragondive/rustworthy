@@ -27,6 +27,31 @@ jobs:
           cd hello_world
           cargo test
 
+  nextest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          ref: setup/hello_world
+
+      - name: setup cargo-nextest
+        uses: taiki-e/install-action@v2
+        with:
+          tool: nextest@0.9.72
+
+      - name: run nextest
+        run: |
+          cd hello_world
+          cargo nextest run --profile ci
+
+      - name: publish test results
+        uses: EnricoMi/publish-unit-test-result-action@v2.16.1
+        if: always()
+        with:
+          files: |
+            hello_world/target/nextest/ci/junit.xml
+
   coverage:
     runs-on: ubuntu-latest
     env:
